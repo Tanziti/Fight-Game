@@ -7,7 +7,7 @@ canvas.height = 576
 
 c.fillRect(0,0, canvas.width, canvas.height)
 
-const gravity = 0.2
+const gravity = 0.7
 
 class Sprite {
     constructor({position, velocity}) {
@@ -36,7 +36,7 @@ class Sprite {
 const player = new Sprite({
     position:{
         x:0,
-        y:0
+        y:427
     },
     velocity: {
         x: 0,
@@ -47,7 +47,7 @@ const player = new Sprite({
 const enemy = new Sprite({
     position:{
         x:400,
-        y:100
+        y:427
     },
     velocity: {
         x: 0,
@@ -67,7 +67,9 @@ const keys ={
     d: {
         pressed: false
     },
-
+    w: {
+        pressed: false
+    },
     ArrowRight: {
         pressed: false
     },
@@ -89,16 +91,16 @@ function animate() {
    enemy.velocity.x = 0
 
    if (keys.a.pressed && player.lastKey === 'a'){
-    player.velocity.x = -1
+    player.velocity.x = -5
    } else if (keys.d.pressed && player.lastKey === 'd'){
-    player.velocity.x = 1
+    player.velocity.x = 5
    }
 
    //enemy movement
    if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
-    enemy.velocity.x = -1
+    enemy.velocity.x = -5
    } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
-    enemy.velocity.x = 1
+    enemy.velocity.x = 5
    }
 }
 
@@ -116,7 +118,9 @@ window.addEventListener('keydown', (event) =>{
             player.lastKey = 'a'
             break
         case 'w':
-            player.velocity.y = -10
+            if (player.position.y + player.height >= canvas.height) {
+                player.velocity.y = -10; // You can adjust the jump velocity as needed
+            }
             break
         case 'ArrowRight':
             keys.ArrowRight.pressed = true
@@ -127,7 +131,9 @@ window.addEventListener('keydown', (event) =>{
             enemy.lastKey = 'ArrowLeft'
             break
         case 'ArrowUp':
-            enemy.velocity.y = -10
+            if (enemy.position.y + enemy.height >= canvas.height) {
+                enemy.velocity.y = -10; // You can adjust the jump velocity as needed
+            }
             break
     }
 })
@@ -139,6 +145,9 @@ window.addEventListener('keyup', (event) =>{
             break
         case 'a':
             keys.a.pressed = false
+            break
+        case 'w':
+            keys.w.pressed = false
             break
     }
     switch (event.key){
