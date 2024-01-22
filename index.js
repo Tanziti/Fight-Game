@@ -10,17 +10,22 @@ c.fillRect(0,0, canvas.width, canvas.height)
 const gravity = 0.7
 
 class Sprite {
-    constructor({position, velocity, color}) {
+    constructor({position, velocity, color, offset}) {
         this.position = position
         this.velocity = velocity
-        this.height = 150
+        this.height = 175
         this.width = 50
         this.lastKey
         this.attackBox = {
-            position: this.position,
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            offset,
             width: 100,
             height: 50
         }
+        this.isAttacking
         this.color = color
     }
     draw(){
@@ -28,6 +33,7 @@ class Sprite {
         c.fillRect(this.position.x, this.position.y, this.width, this.height)
 
         //attack box
+        if (this.isAttacking ){
         c.fillStyle = 'green'
         c.fillRect(
             this.attackBox.position.x, 
@@ -35,10 +41,13 @@ class Sprite {
             this.attackBox.width,
             this.attackBox.height
             )
+        }
     }
 
     update() {
         this.draw()
+        this.attackBox.position.x = this.position.x + this.attackBox.offset.x
+        this.attackBox.position.y = this.position.y
        
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
@@ -47,32 +56,46 @@ class Sprite {
             this.velocity.y = 0
         } else  this.velocity.y += gravity
     }
+    attack(){
+        this.isAttacking = true
+        setTimeout(() => {
+        this.isAttacking = false
+        }, 100)
+    }
 }
 
 const player = new Sprite({
     position:{
-        x:0,
-        y:427
+        x:100,
+        y:420
     },
     velocity: {
         x: 0,
         y: 0
     },
     jumping: false,
-    color: 'blue'
+    color: 'blue',
+    offset: {
+        x: 0,
+        y: 0
+    }
 })
 
 const enemy = new Sprite({
     position:{
         x:400,
-        y:427
+        y:420
     },
     velocity: {
         x: 0,
         y: 0
     },
     jumping: false,
-    color: 'red'
+    color: 'red',
+    offset: {
+        x: -50,
+        y: 0
+    }
 })
 
 player.draw()
@@ -99,6 +122,12 @@ const keys ={
 
 }
 
+function rectangularCollision({rectangle1,rectangle2}) {
+    return  (rectangle1.attackBox.position.x + rectangle1.attackBox.width >= rectangle2.position.x) && 
+    (rectangle1.attackBox.position.x <= rectangle2.position.x + rectangle2.width) &&
+    (rectangle1.attackBox.position.y + rectangle1.attackBox.height >= rectangle2.position.y) &&
+     (rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height)
+}
 
 function animate() {
     window.requestAnimationFrame(animate)
@@ -127,11 +156,21 @@ function animate() {
    }
 
    //collision
-   if ((player.attackBox.position.x + player.attackBox.width >= enemy.position.x) && 
-   (player.attackBox.position.x <= enemy.position.x + enemy.width) &&
-   (player.attackBox.position.y + player.attackBox.height >= enemy.position.y) &&
-    (player.attackBox.position.y <= enemy.position.y + enemy.height)) {
-    console.log("hey! stop touching me!")
+   if ( rectangularCollision({
+    rectangle1: player,
+    rectangle2: enemy
+   }) &&
+    player.isAttacking) {
+        player.isAttacking = false
+    console.log("DIE EVIL MONSTER!")
+   }
+   if ( rectangularCollision({
+    rectangle1: enemy,
+    rectangle2: player
+   }) &&
+    enemy.isAttacking) {
+        enemy.isAttacking = false
+    console.log("DIE MEDDLING RECTANGLE!")
    }
 }
 
@@ -153,7 +192,9 @@ window.addEventListener('keydown', (event) =>{
                 player.velocity.y = -15; // You can adjust the jump velocity as needed
                 player.jumping = true;
             }
-            
+            break
+        case ' ':
+            player.attack()
             break
         case 'ArrowRight':
             keys.ArrowRight.pressed = true
@@ -168,6 +209,9 @@ window.addEventListener('keydown', (event) =>{
                 enemy.velocity.y = -15; // You can adjust the jump velocity as needed
                 enemy.jumping = true;
             }
+            break
+        case '/':
+            enemy.attack()
             break
     }
 })
