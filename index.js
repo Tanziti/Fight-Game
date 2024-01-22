@@ -10,15 +10,31 @@ c.fillRect(0,0, canvas.width, canvas.height)
 const gravity = 0.7
 
 class Sprite {
-    constructor({position, velocity}) {
+    constructor({position, velocity, color}) {
         this.position = position
         this.velocity = velocity
         this.height = 150
+        this.width = 50
         this.lastKey
+        this.attackBox = {
+            position: this.position,
+            width: 100,
+            height: 50
+        }
+        this.color = color
     }
     draw(){
-        c.fillStyle = 'red'
-        c.fillRect(this.position.x, this.position.y, 50, this.height)
+        c.fillStyle = this.color
+        c.fillRect(this.position.x, this.position.y, this.width, this.height)
+
+        //attack box
+        c.fillStyle = 'green'
+        c.fillRect(
+            this.attackBox.position.x, 
+            this.attackBox.position.y,
+            this.attackBox.width,
+            this.attackBox.height
+            )
     }
 
     update() {
@@ -41,7 +57,9 @@ const player = new Sprite({
     velocity: {
         x: 0,
         y: 0
-    }
+    },
+    jumping: false,
+    color: 'blue'
 })
 
 const enemy = new Sprite({
@@ -52,7 +70,9 @@ const enemy = new Sprite({
     velocity: {
         x: 0,
         y: 0
-    }
+    },
+    jumping: false,
+    color: 'red'
 })
 
 player.draw()
@@ -90,6 +110,9 @@ function animate() {
    player.velocity.x = 0
    enemy.velocity.x = 0
 
+   handleJumping(player);
+   handleJumping(enemy);
+
    if (keys.a.pressed && player.lastKey === 'a'){
     player.velocity.x = -5
    } else if (keys.d.pressed && player.lastKey === 'd'){
@@ -101,6 +124,14 @@ function animate() {
     enemy.velocity.x = -5
    } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
     enemy.velocity.x = 5
+   }
+
+   //collision
+   if ((player.attackBox.position.x + player.attackBox.width >= enemy.position.x) && 
+   (player.attackBox.position.x <= enemy.position.x + enemy.width) &&
+   (player.attackBox.position.y + player.attackBox.height >= enemy.position.y) &&
+    (player.attackBox.position.y <= enemy.position.y + enemy.height)) {
+    console.log("hey! stop touching me!")
    }
 }
 
@@ -118,9 +149,11 @@ window.addEventListener('keydown', (event) =>{
             player.lastKey = 'a'
             break
         case 'w':
-            if (player.position.y + player.height >= canvas.height) {
-                player.velocity.y = -10; // You can adjust the jump velocity as needed
+            if (!player.jumping && player.position.y + player.height >= canvas.height) {
+                player.velocity.y = -15; // You can adjust the jump velocity as needed
+                player.jumping = true;
             }
+            
             break
         case 'ArrowRight':
             keys.ArrowRight.pressed = true
@@ -131,8 +164,9 @@ window.addEventListener('keydown', (event) =>{
             enemy.lastKey = 'ArrowLeft'
             break
         case 'ArrowUp':
-            if (enemy.position.y + enemy.height >= canvas.height) {
-                enemy.velocity.y = -10; // You can adjust the jump velocity as needed
+            if (!enemy.jumping && enemy.position.y + enemy.height >= canvas.height) {
+                enemy.velocity.y = -15; // You can adjust the jump velocity as needed
+                enemy.jumping = true;
             }
             break
     }
@@ -146,9 +180,6 @@ window.addEventListener('keyup', (event) =>{
         case 'a':
             keys.a.pressed = false
             break
-        case 'w':
-            keys.w.pressed = false
-            break
     }
     switch (event.key){
         case 'ArrowRight':
@@ -159,3 +190,9 @@ window.addEventListener('keyup', (event) =>{
             break
     }
 })
+
+function handleJumping(sprite) {
+    if (sprite.position.y + sprite.height >= canvas.height) {
+        sprite.jumping = false;
+    }
+}
