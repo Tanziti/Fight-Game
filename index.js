@@ -210,7 +210,7 @@ window.addEventListener('keydown', (event) =>{
                 enemy.jumping = true;
             }
             break
-        case '/':
+        case 'Alt':
             enemy.attack()
             break
     }
