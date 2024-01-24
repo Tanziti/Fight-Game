@@ -217,6 +217,7 @@ window.addEventListener('keydown', (event) =>{
 })
 
 window.addEventListener('keyup', (event) =>{
+    
     switch (event.key) {
         case 'd':
             keys.d.pressed = false
