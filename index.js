@@ -162,6 +162,7 @@ function animate() {
    }) &&
     player.isAttacking) {
         player.isAttacking = false
+        document.querySelector('#enemyHealth').style.width = '20%'
     console.log("DIE EVIL MONSTER!")
    }
    if ( rectangularCollision({
