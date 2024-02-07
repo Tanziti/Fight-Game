@@ -130,16 +130,9 @@ function rectangularCollision({rectangle1,rectangle2}) {
      (rectangle1.attackBox.position.y <= rectangle2.position.y + rectangle2.height)
 }
 
-let timer = 10
-function decreaseTimer() {
-    if (timer > 0){
-        setTimeout(decreaseTimer, 1000)
-        timer--
-        document.querySelector('#timer').innerHTML =  timer
-    }
-    if(timer === 0){
-        document.querySelector('#displayText').style.display = 'flex'
-      if (player.health === enemy.health){
+function determineWinner({player, enemy}){
+    document.querySelector('#displayText').style.display = 'flex'
+    if (player.health === enemy.health){
         document.querySelector('#displayText').innerHTML = 'Tie'
         console.log("tie")
       } else if (player.health > enemy.health){
@@ -147,6 +140,17 @@ function decreaseTimer() {
       } else if (enemy.health > player.health){
         document.querySelector('#displayText').innerHTML = 'Enemy Wins'
       }
+}
+
+let timer = 15
+function decreaseTimer() {
+    if (timer > 0){
+        setTimeout(decreaseTimer, 1000)
+        timer--
+        document.querySelector('#timer').innerHTML =  timer
+    }
+    if(timer === 0){
+        determineWinner({player, enemy})
     }
 }
 
@@ -198,6 +202,10 @@ function animate() {
         player.health -= 20
         document.querySelector('#playerHealth').style.width = player.health + "%"
     console.log("DIE MEDDLING RECTANGLE!")
+   }
+   //end game based on health
+   if ( enemy.health <= 0 || player.health <= 0){
+        determineWinner({player, enemy})
    }
 }
 
