@@ -27,6 +27,7 @@ class Sprite {
         }
         this.isAttacking
         this.color = color
+        this.health = 100
     }
     draw(){
         c.fillStyle = this.color
@@ -162,7 +163,8 @@ function animate() {
    }) &&
     player.isAttacking) {
         player.isAttacking = false
-        document.querySelector('#enemyHealth').style.width = '20%'
+        enemy.health -= 20
+        document.querySelector('#enemyHealth').style.width = enemy.health + "%"
     console.log("DIE EVIL MONSTER!")
    }
    if ( rectangularCollision({
