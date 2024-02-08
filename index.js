@@ -149,7 +149,7 @@ window.addEventListener('keydown', (event) =>{
             player.lastKey = 'a'
             break
         case 'w':
-            if (!player.jumping && player.position.y + player.height >= canvas.height) {
+            if (!player.jumping && player.position.y + player.height >= canvas.height - 96) {
                 player.velocity.y = -15; // You can adjust the jump velocity as needed
                 player.jumping = true;
             }
@@ -166,7 +166,7 @@ window.addEventListener('keydown', (event) =>{
             enemy.lastKey = 'ArrowLeft'
             break
         case 'ArrowUp':
-            if (!enemy.jumping && enemy.position.y + enemy.height >= canvas.height) {
+            if (!enemy.jumping && enemy.position.y + enemy.height >= canvas.height - 96) {
                 enemy.velocity.y = -15; // You can adjust the jump velocity as needed
                 enemy.jumping = true;
             }
@@ -198,7 +198,7 @@ window.addEventListener('keyup', (event) =>{
 })
 
 function handleJumping(sprite) {
-    if (sprite.position.y + sprite.height >= canvas.height) {
+    if (sprite.position.y + sprite.height >= canvas.height -96) {
         sprite.jumping = false;
     }
 }
