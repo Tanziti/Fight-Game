@@ -1,5 +1,5 @@
 class Sprite {
-    constructor({position, imageSrc, scale = 1, framesMax = 1, offset}) {
+    constructor({position, imageSrc, scale = 1, framesMax = 1, offset = {x:0, y:0}}) {
         this.position = position
         this.height = 175
         this.width = 50
@@ -53,7 +53,8 @@ class Fighter extends Sprite{
             position,
             imageSrc,
             scale,
-            framesMax
+            framesMax,
+            offset
           }
         )
       
