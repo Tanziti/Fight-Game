@@ -9,10 +9,10 @@ class Sprite {
         this.framesMax = framesMax
         this.framesCurrent = 0  
         this.framesElapsed = 0
-        this.framesHold = 5
+        this.framesHold = 10
         this.offset = offset
     }
-    draw(){
+    draw() { 
         c.drawImage(
             this.image, 
             this.framesCurrent * (this.image.width / this.framesMax),
@@ -21,12 +21,12 @@ class Sprite {
             this.image.height,
             this.position.x - this.offset.x, 
             this.position.y - this.offset.y, 
-            this.image.width / this.framesMax * this.scale, 
-            this.image.height * this.scale)
+            (this.image.width / this.framesMax) * this.scale, 
+            this.image.height * this.scale
+            )
     }
 
-    update() {
-        this.draw()
+    animateFrames() {
         this.framesElapsed++
 
         if (this.framesElapsed % this.framesHold === 0){
@@ -36,6 +36,11 @@ class Sprite {
             this.framesCurrent = 0;
         }
       }
+    }
+
+    update() {
+        this.draw()
+        this.animateFrames()
     }
 }
 
@@ -76,12 +81,13 @@ class Fighter extends Sprite{
         this.health = 100
         this.framesCurrent = 0  
         this.framesElapsed = 0
-        this.framesHold = 5
+        this.framesHold = 8
     }
    
 
     update() {
         this.draw()
+        this.animateFrames()
         this.attackBox.position.x = this.position.x + this.attackBox.offset.x
         this.attackBox.position.y = this.position.y
        
