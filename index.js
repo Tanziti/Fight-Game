@@ -127,13 +127,12 @@ function animate() {
    handleJumping(enemy);
 
     //player movement
-    player.image = player.sprites.idle.image
+    player.switchSprite('idle')
    if (keys.a.pressed && player.lastKey === 'a'){
-    player.velocity.x = -5
-    player.image = player.sprites.run.image
+    player.switchSprite('run')
    } else if (keys.d.pressed && player.lastKey === 'd'){
     player.velocity.x = 5
-    player.image = player.sprites.run.image
+    player.switchSprite('run')
    }
 
    if (player.velocity.y < 0){
