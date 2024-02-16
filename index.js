@@ -136,8 +136,7 @@ function animate() {
    }
 
    if (player.velocity.y < 0){
-    player.image = player.sprites.jump.image
-    player.framesMax = player.sprites.jump.framesMax
+    player.switchSprite('jump')
    }
 
    //enemy movement
