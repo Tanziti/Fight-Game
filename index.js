@@ -184,8 +184,21 @@ function animate() {
    //enemy movement
    if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft'){
     enemy.velocity.x = -5
+    enemy.switchSprite('run')
+    console.log(enemy.image)
    } else if (keys.ArrowRight.pressed && enemy.lastKey === 'ArrowRight'){
     enemy.velocity.x = 5
+    enemy.switchSprite('run')
+   } else {
+    enemy.switchSprite('idle')
+   }
+   //enemy jumping
+   if (enemy.velocity.y < 0){
+    enemy.switchSprite('jump')
+   } else if (enemy.velocity.y > 0){
+    enemy.switchSprite('fall')
+   }else {
+    enemy.switchSprite('idle')
    }
 
    //collision
@@ -251,7 +264,7 @@ window.addEventListener('keydown', (event) =>{
                 enemy.jumping = true;
             }
             break
-        case 'Alt':
+        case 'ArrowDown':
             enemy.attack()
             break
     }
