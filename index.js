@@ -171,6 +171,7 @@ function animate() {
    } else if (keys.d.pressed && player.lastKey === 'd'){
     player.velocity.x = 5
     player.switchSprite('run')
+    console.log(player.image)
    } else {
     player.switchSprite('idle')
    }
@@ -213,8 +214,8 @@ function animate() {
     console.log("DIE EVIL MONSTER!")
    }
    if ( rectangularCollision({
-    rectangle1: enemy,
-    rectangle2: player
+    rectangle1: player,
+    rectangle2: enemy
    }) &&
     enemy.isAttacking) {
         enemy.isAttacking = false
