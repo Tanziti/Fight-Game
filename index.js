@@ -75,7 +75,7 @@ const player = new Fighter({
             x: 0,
             y: 0
             },
-            width: 100,
+            width: 200,
             height: 50
         }
 
@@ -223,7 +223,7 @@ function animate() {
     rectangle1: player,
     rectangle2: enemy
    }) &&
-    player.isAttacking) {
+    player.isAttacking && player.framesCurrent === 4) {
         player.isAttacking = false
         enemy.health -= 20
         document.querySelector('#enemyHealth').style.width = enemy.health + "%"
