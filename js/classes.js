@@ -83,7 +83,7 @@ class Fighter extends Sprite{
         this.health = 100
         this.framesCurrent = 0  
         this.framesElapsed = 0
-        this.framesHold = 5
+        this.framesHold = 6
         this.sprites = sprites
 
          for (const sprite in this.sprites){
@@ -99,7 +99,7 @@ class Fighter extends Sprite{
         this.animateFrames()
         
         this.attackBox.position.x = this.position.x + this.attackBox.offset.x
-        this.attackBox.position.y = this.position.y
+        this.attackBox.position.y = this.position.y + this.attackBox.offset.y
 
         c.fillRect(this.attackBox.position.x, this.attackBox.position.y, this.attackBox.width, this.attackBox.height)
        
