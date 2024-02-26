@@ -229,6 +229,11 @@ function animate() {
         document.querySelector('#enemyHealth').style.width = enemy.health + "%"
     console.log("DIE EVIL MONSTER!")
    }
+
+   //if player misses
+   if (player.isAttacking && player.framesCurrent === 4){
+    player.isAttacking = false
+   }
    if ( rectangularCollision({
     rectangle1: player,
     rectangle2: enemy
